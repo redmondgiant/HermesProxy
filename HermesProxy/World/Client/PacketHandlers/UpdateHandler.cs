@@ -2859,7 +2859,7 @@ namespace HermesProxy.World.Client
                             $"ModernBefore=0x{modernFlags:X8}");
 
                         //modernFlags |= 0x20u;
-                        modernFlags = 0x20u;
+                        modernFlags = 0x00004024u;
 
                         Log.Print(LogType.Error,
                             $"SPARKLE TEST: Silverleaf ModernAfter=0x{modernFlags:X8}");
