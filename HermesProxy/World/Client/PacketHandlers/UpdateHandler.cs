@@ -2847,6 +2847,25 @@ namespace HermesProxy.World.Client
 
                     GameObjectDynamicFlagsLegacy flags = (GameObjectDynamicFlagsLegacy)(updates[GAMEOBJECT_DYN_FLAGS].UInt32Value);
                     updateData.ObjectData.DynamicFlags = (oldValue | (uint)flags.CastFlags<GameObjectDynamicFlagsModern>());
+
+                    // DEBUGGING UNTIl EOB
+                    uint modernFlags = oldValue | (uint)flags.CastFlags<GameObjectDynamicFlagsModern>();
+
+                    if (updateData.ObjectData.EntryID == 1617)
+                    {
+                        Log.Print(LogType.Error,
+                            $"SPARKLE TEST: Silverleaf entered DYN_FLAGS block. " +
+                            $"LegacyFlags=0x{(uint)flags:X8}, " +
+                            $"ModernBefore=0x{modernFlags:X8}");
+
+                        //modernFlags |= 0x20u;
+                        modernFlags = 0x20u;
+
+                        Log.Print(LogType.Error,
+                            $"SPARKLE TEST: Silverleaf ModernAfter=0x{modernFlags:X8}");
+                    }
+
+                    updateData.ObjectData.DynamicFlags = modernFlags;
                 }
                 int GAMEOBJECT_FACTION = LegacyVersion.GetUpdateField(GameObjectField.GAMEOBJECT_FACTION);
                 if (GAMEOBJECT_FACTION >= 0 && updateMaskArray[GAMEOBJECT_FACTION])

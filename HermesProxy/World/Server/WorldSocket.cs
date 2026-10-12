@@ -501,6 +501,14 @@ namespace HermesProxy.World.Server
                 GetSession().OnDisconnect();
                 return;
             }
+
+            Log.Print(LogType.Error,
+                $"AUTH DIAG: Build={GetSession().Build}, OS={GetSession().OS}, " +
+                $"SessionKeyLength={GetSession().SessionKey?.Length}, " +
+                $"ClientChallengeLength={authSession.LocalChallenge.Count}, " +
+                $"ServerChallengeLength={_serverChallenge.Length}, " +
+                $"ReceivedDigestLength={authSession.Digest?.Length}, " +
+                $"PlatformSeedAvailable={buildInfo.BuildSeeds.ContainsKey(GetSession().OS)}");
             
             byte[]? platformSeed = buildInfo.BuildSeeds.GetValueOrDefault(GetSession().OS);
             if (platformSeed == null || !TrySeed(platformSeed))
