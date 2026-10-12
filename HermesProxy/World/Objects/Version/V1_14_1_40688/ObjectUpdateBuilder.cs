@@ -1,5 +1,6 @@
 ﻿using Framework.GameMath;
 using Framework.IO;
+using Framework.Logging;
 using HermesProxy.World.Enums.V1_14_1_40688;
 using HermesProxy.World.Server.Packets;
 using System;
@@ -684,6 +685,17 @@ namespace HermesProxy.World.Objects.Version.V1_14_1_40688
                 return;
 
             ObjectData objectData = m_updateData.ObjectData;
+            // SPARKLE BUILDER: inspect the exact fields being handed to the 1.14.2 update-field writer.
+            if (objectData != null && objectData.EntryID == 1617)
+            {
+                GameObjectData sparkleGo = m_updateData.GameObjectData;
+                Log.Print(LogType.Error,
+                    $"SPARKLE BUILDER: Silverleaf UpdateType={m_updateData.Type}, " +
+                    $"DynamicFlags={(objectData.DynamicFlags.HasValue ? $"0x{objectData.DynamicFlags.Value:X8}" : "null")}, " +
+                    $"GOFlags={(sparkleGo?.Flags != null ? $"0x{sparkleGo.Flags.Value:X8}" : "null")}, " +
+                    $"GOState={(sparkleGo?.State != null ? sparkleGo.State.ToString() : "null")}, " +
+                    $"GOTypeID={(sparkleGo?.TypeID != null ? sparkleGo.TypeID.ToString() : "null")}");
+            }
             if (objectData.Guid != null)
                 m_fields.SetUpdateField<WowGuid128>(ObjectField.OBJECT_FIELD_GUID, objectData.Guid);
             if (objectData.EntryID != null)
