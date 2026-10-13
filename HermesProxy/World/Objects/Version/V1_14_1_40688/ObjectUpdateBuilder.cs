@@ -144,6 +144,19 @@ namespace HermesProxy.World.Objects.Version.V1_14_1_40688
         public void BuildValuesUpdate(WorldPacket packet)
         {
             WriteValuesToArray();
+
+            // SPARKLE WIRE: inspect the final update-field mask and stored value
+            // immediately before the normal update-field writer serializes them.
+            if (m_updateData.ObjectData != null && m_updateData.ObjectData.EntryID == 1617)
+            {
+                int fieldIndex = (int)ObjectField.OBJECT_DYNAMIC_FLAGS;
+                bool maskBit = m_fields.m_updateMask.GetBit(fieldIndex);
+                uint storedValue = m_fields.GetUpdateField<uint>(ObjectField.OBJECT_DYNAMIC_FLAGS);
+                Log.Print(LogType.Error,
+                    $"SPARKLE WIRE: Silverleaf UpdateType={m_updateData.Type}, " +
+                    $"FieldIndex={fieldIndex}, MaskBit={maskBit}, StoredValue=0x{storedValue:X8}");
+            }
+
             m_fields.WriteToPacket(packet);
         }
 
